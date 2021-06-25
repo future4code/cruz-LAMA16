@@ -4,7 +4,7 @@ import userBusiness from './../../business/UserBusiness'
 
 export const signupController = async (req:Request, res:Response) => {
     try {
-      const token = userBusiness.signup(req.body as SignupUserDTO)
+      const token = await userBusiness.signup(req.body as SignupUserDTO)
       res.status(201).send({
           message: "Success",
           token

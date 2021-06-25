@@ -32,7 +32,7 @@ class UserBusiness {
         await userDatabase.insertGeneric(user)
         return tokenGenerator({id: user.id, role: user.role})
       }catch (err){
-        if(err?.sqlMessage.includes('Duplicate entry')){
+        if(err.sqlMessage?.includes('Duplicate entry')){
           throw new CustomError(409,'E-mail already exists.')
         }
         throw new CustomError(err.statusCode,err.message)
