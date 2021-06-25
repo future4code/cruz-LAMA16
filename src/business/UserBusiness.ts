@@ -1,6 +1,6 @@
 import userDatabase from './../data/User/UserDatabase'
-import {SignupUser, SignupUserDTO, toUserRoles} from "../model/User";
-import {createHash} from "../services/HashManager";
+import {LoginUserDTO, SignupUser, SignupUserDTO, toUserRoles} from "../model/User";
+import {compareHash, createHash} from "../services/HashManager";
 import {idGenerator} from "../services/IdGenerator";
 import {tokenGenerator} from "../services/Authenticator";
 import validateEmail from "../services/validateEmail";
@@ -37,7 +37,35 @@ class UserBusiness {
         }
         throw new CustomError(err.statusCode,err.message)
       }
+  }
 
+  public login = async(loginInput : LoginUserDTO):Promise<string>=>{
+    try{
+      if(!validateEmail(loginInput.email) ||
+        !loginInput.password ||
+        typeof loginInput.password !== 'string'
+      ){
+        throw new CustomError(400, 'All fields are required!')
+      }
+
+      const [result] = await userDatabase.selectGeneric(
+        ['id','role','password'],
+        {email:loginInput.email}
+      )
+
+      if(!result){
+        throw new CustomError(404, 'E-mail not found.')
+      }
+
+      if(!compareHash(loginInput.password, result.password)){
+        throw new CustomError(401, 'Password is incorrect.')
+      }
+
+      return tokenGenerator({id: result.id, role: toUserRoles(result.role)})
+
+    }catch (err){
+      throw new CustomError(err.statusCode, err.message)
+    }
   }
 }
 

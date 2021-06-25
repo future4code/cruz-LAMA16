@@ -3,14 +3,6 @@ export enum USER_ROLES {
   NORMAL = "NORMAL",
 }
 
-export type User = {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
-  role: USER_ROLES;
-};
-
 export type SignupUser = {
   name: string;
   email: string;
@@ -24,6 +16,11 @@ export type SignupUserDTO = {
   email : any,
   password : any,
   role : any
+}
+
+export type LoginUserDTO = {
+  email:any,
+  password:any
 }
 
 export type AuthenticationData = {
