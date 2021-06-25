@@ -6,3 +6,4 @@ build
 .rest
 
 .idea/
+request.rest
