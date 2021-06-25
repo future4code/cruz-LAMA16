@@ -1,7 +1,9 @@
 import Database from "../Database";
 
-export class UserDatabase extends Database{
+class UserDatabase extends Database{
   constructor() {
-    super('');
+    super('lama_users');
   }
 }
+
+export default new UserDatabase()
