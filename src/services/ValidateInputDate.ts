@@ -1,4 +1,5 @@
 import CustomError from "../business/erros/CustomError";
+import {valideDate} from "../model/Show";
 
 export class ValideDate {
   constructor(private day : string,
@@ -6,7 +7,7 @@ export class ValideDate {
               private hourEnd : string
   ) {}
 
-  private valideHour= ():[number,number]=>{
+  private validateHour= ():[number,number]=>{
     const regex = new RegExp('[0-2][0-9]h')
 
     const start = Number(this.hourStart.slice(0,2))
@@ -32,7 +33,7 @@ export class ValideDate {
 
   }
 
-  private valideDay = ():string=>{
+  private validateDay = ():string=>{
     if(this.day.toLowerCase().includes('sexta') ||
       this.day.toLowerCase().includes('sábado') ||
       this.day.toLowerCase().includes('domingo')){
@@ -43,13 +44,11 @@ export class ValideDate {
     }
   }
 
-  public valideDate = ():{
-    start_time: number, end_time:number, day:string
-  }=>{
-    const [start_time, end_time] = this.valideHour()
-    const day = this.valideDay()
+  public validateDate = ():valideDate=>{
+    const [start_time, end_time] = this.validateHour()
+    const week_day = this.validateDay()
     return {
-      day,end_time,start_time
+      week_day,end_time,start_time
     }
   }
 
