@@ -3,6 +3,7 @@ import {ShowData, ShowDTO, valideDate} from "../model/Show";
 import CustomError from "./erros/CustomError";
 import {ValidateInputDate} from "../services/ValidateInputDate";
 import {idGenerator} from "../services/IdGenerator";
+import bandBusiness from "./Bands/BandBusiness";
 
 class ShowBusiness {
   public addShow = async(input : ShowDTO):Promise<void>=>{
@@ -13,9 +14,8 @@ class ShowBusiness {
       const date = new ValidateInputDate(input.weekDay, input.startTime, input.endTime)
       const valideDate : valideDate = date.validateDate()
 
-      //aqui verifico se a banda existe
+      await bandBusiness.getBandByIdOrName(input.bandId)
 
-    //  existindo prossigo:
       const showData : ShowData = {
         ...valideDate,
         band_id: input.bandId,
@@ -24,8 +24,10 @@ class ShowBusiness {
       await showDatabase.insertGeneric(showData)
 
     }catch (err){
-
+      throw new CustomError(err.statusCode, err.sqlMessage || err.message)
     }
 
   }
 }
+
+export default new ShowBusiness()
