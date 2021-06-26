@@ -1,7 +1,7 @@
 import CustomError from "../business/erros/CustomError";
 import {valideDate} from "../model/Show";
 
-export class ValideDate {
+export class ValidateInputDate {
   constructor(private day : string,
               private hourStart : string,
               private hourEnd : string

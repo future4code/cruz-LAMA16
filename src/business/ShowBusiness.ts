@@ -1,7 +1,7 @@
 import showDatabase from "../data/ShowDatabase";
 import {ShowData, ShowDTO, valideDate} from "../model/Show";
 import CustomError from "./erros/CustomError";
-import {ValideDate} from "../services/ValideDate";
+import {ValidateInputDate} from "../services/ValidateInputDate";
 import {idGenerator} from "../services/IdGenerator";
 
 class ShowBusiness {
@@ -10,7 +10,7 @@ class ShowBusiness {
       if(!input.weekDay || !input.startTime || !input.endTime || !input.bandId){
         throw new CustomError(400, 'All fields are required!')
       }
-      const date = new ValideDate(input.weekDay, input.startTime, input.endTime)
+      const date = new ValidateInputDate(input.weekDay, input.startTime, input.endTime)
       const valideDate : valideDate = date.validateDate()
 
       //aqui verifico se a banda existe
