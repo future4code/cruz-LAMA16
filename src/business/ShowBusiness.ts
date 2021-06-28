@@ -8,8 +8,12 @@ import {tokenValidate} from "../services/Authenticator";
 import {USER_ROLES} from "../model/User";
 
 class ShowBusiness {
-  public addShow = async(input : ShowDTO):Promise<void>=>{
+  public addShow = async(input : ShowDTO, token : any):Promise<void>=>{
     try{
+      if(!token || typeof token !=='string'){
+        throw new CustomError(400, 'Token invalid')
+      }
+      tokenValidate(token)
       if(!input.weekDay || !input.startTime || !input.endTime || !input.bandId){
         throw new CustomError(400, 'All fields are required!')
       }
@@ -38,6 +42,12 @@ class ShowBusiness {
       await showDatabase.insertGeneric(showData)
 
     }catch (err){
+      if(err.message?.includes('jwt expired')){
+        throw new CustomError(403, 'Token expired.')
+      }
+      else if(err.message?.includes('jwt invalid')){
+        throw new CustomError(400, 'Token invalid.')
+      }
       throw new CustomError(err.statusCode, err.sqlMessage || err.message)
     }
 
@@ -76,6 +86,12 @@ class ShowBusiness {
 
       await showDatabase.updateGeneric({photo:url}, {id: idShow})
     }catch (err){
+      if(err.message?.includes('jwt expired')){
+        throw new CustomError(403, 'Token expired.')
+      }
+      else if(err.message?.includes('jwt invalid')){
+        throw new CustomError(400, 'Token invalid.')
+      }
       throw new CustomError(err.statusCode || 500, err.message || err.sqlMessage)
     }
 
