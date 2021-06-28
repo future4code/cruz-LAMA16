@@ -46,6 +46,7 @@ class ShowBusiness {
     const result = await showDatabase.selectGeneric(
       aliases || ['name','music_genre'], {week_day:weekDay}
     ).join('lama_bands','lama_bands.id','lama_shows.band_id')
+      .orderBy('start_time', 'asc')
 
     if(result.length===0){
       throw new CustomError(404, 'There are no shows on this day.')
