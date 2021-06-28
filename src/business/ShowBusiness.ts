@@ -5,6 +5,7 @@ import validateInputDate, {ValidateInputDate} from "../services/ValidateInputDat
 import {idGenerator} from "../services/IdGenerator";
 import bandBusiness from "./Bands/BandBusiness";
 import {tokenValidate} from "../services/Authenticator";
+import {USER_ROLES} from "../model/User";
 
 class ShowBusiness {
   public addShow = async(input : ShowDTO):Promise<void>=>{
@@ -58,7 +59,7 @@ class ShowBusiness {
   public addPhoto = async(url : any, idShow : any, token : any):Promise<void>=>{
     try{
       if(!token || typeof token!=="string"){
-        throw new CustomError(400, 'Token invalid')
+        throw new CustomError(400, 'Token invalid.')
       }
       tokenValidate(token)
       if(!url || typeof url!=='string'){
@@ -78,6 +79,40 @@ class ShowBusiness {
       throw new CustomError(err.statusCode || 500, err.message || err.sqlMessage)
     }
 
+  }
+
+  public getAllPhotos = async(token : any):Promise<string[]>=>{
+    try{
+      if(!token || typeof token!=='string'){
+        throw new CustomError(400, 'Token invalid.')
+      }
+      const payload = tokenValidate(token)
+      if(payload.role!==USER_ROLES.ADMIN){
+        throw new CustomError(403, 'Only admin.')
+      }
+
+      const result = await showDatabase.selectGeneric('photo')
+      if(result.length===0){
+        throw new CustomError(404, 'Photos not found.')
+      }
+
+      const photos = []
+      for(const res of result){
+        if(res.photo!==null){
+          photos.push(res.photo)
+        }
+      }
+      return photos
+
+    }catch (err){
+      if(err.message?.includes('jwt expired')){
+        throw new CustomError(403, 'Token expired.')
+      }
+      else if(err.message?.includes('jwt invalid')){
+        throw new CustomError(400, 'Token invalid.')
+      }
+      throw new CustomError(err.statusCode || 500, err.message || 'Internal server error.')
+    }
   }
 
 }
