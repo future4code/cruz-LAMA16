@@ -1,6 +1,11 @@
 # Labenu Music Awards
 
+##SURGE FRONT : http://lama16-front.surge.sh/
+
 ##ENDPOINTS
+
+####Criar tabelas
+* POST */tables*
 
 ####Criar usuário
 *  POST */user/signup* <br>
