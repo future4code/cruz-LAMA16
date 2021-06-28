@@ -57,14 +57,14 @@
 //     })
 //   })
 // })
-
-import {ValideDate} from "../src/services/ValideDate";
-
-describe('Test ValideDate',()=>{
-  test('Successful',()=>{
-    const date = new ValideDate('sábado', '09h','10h')
-    expect(date.valideDate()).toEqual({
-      day:'sábado',end_time:10,start_time:9
-    })
-  })
-})
+//
+// import {ValideDate} from "../src/services/ValideDate";
+//
+// describe('Test ValideDate',()=>{
+//   test('Successful',()=>{
+//     const date = new ValideDate('sábado', '09h','10h')
+//     expect(date.valideDate()).toEqual({
+//       day:'sábado',end_time:10,start_time:9
+//     })
+//   })
+// })

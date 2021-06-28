@@ -7,7 +7,7 @@ export class ValidateInputDate {
               private hourEnd : string
   ) {}
 
-  private validateHour= ():[number,number]=>{
+  public validateHour= ():[number,number]=>{
     const regex = new RegExp('[0-2][0-9]h')
 
     const start = Number(this.hourStart.slice(0,2))
@@ -33,11 +33,11 @@ export class ValidateInputDate {
 
   }
 
-  private validateDay = ():string=>{
-    if(this.day.toLowerCase().includes('sexta') ||
-      this.day.toLowerCase().includes('sábado') ||
-      this.day.toLowerCase().includes('domingo')){
-      return this.day
+  public validateDay = (weekDay = this.day):string=>{
+    if(weekDay.toLowerCase().includes('sexta') ||
+      weekDay.toLowerCase().includes('sábado') ||
+      weekDay.toLowerCase().includes('domingo')){
+      return weekDay
     }
     else{
       throw new CustomError(400,'Day invalid')
@@ -52,4 +52,17 @@ export class ValidateInputDate {
     }
   }
 
+  public validateShowDate = (startTime : number, endTime : number) : void =>{
+    const {start_time, end_time} = this.validateDate()
+    console.log(start_time, end_time, startTime, endTime)
+    if(start_time===startTime || end_time===endTime ||
+      (start_time>startTime && start_time<endTime) ||
+      (start_time<startTime && end_time>startTime)
+    ){
+      throw new CustomError(400, 'There is already a show on this date and hour.')
+    }
+  }
+
 }
+
+export default new ValidateInputDate('','','')
