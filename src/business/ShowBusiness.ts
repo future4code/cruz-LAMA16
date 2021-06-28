@@ -4,6 +4,7 @@ import CustomError from "./erros/CustomError";
 import validateInputDate, {ValidateInputDate} from "../services/ValidateInputDate";
 import {idGenerator} from "../services/IdGenerator";
 import bandBusiness from "./Bands/BandBusiness";
+import {tokenValidate} from "../services/Authenticator";
 
 class ShowBusiness {
   public addShow = async(input : ShowDTO):Promise<void>=>{
@@ -52,6 +53,31 @@ class ShowBusiness {
       throw new CustomError(404, 'There are no shows on this day.')
     }
     return result
+  }
+
+  public addPhoto = async(url : any, idShow : any, token : any):Promise<void>=>{
+    try{
+      if(!token || typeof token!=="string"){
+        throw new CustomError(400, 'Token invalid')
+      }
+      tokenValidate(token)
+      if(!url || typeof url!=='string'){
+        throw new CustomError(400, 'Property url is required.')
+      }
+      if(!idShow || typeof idShow!=="string"){
+        throw new CustomError(400, 'Property idShow is required.')
+      }
+
+      const [result] = await showDatabase.selectGeneric('id',  {id:idShow})
+      if(!result){
+        throw new CustomError(404, 'Show not found.')
+      }
+
+      await showDatabase.updateGeneric({photo:url}, {id: idShow})
+    }catch (err){
+      throw new CustomError(err.statusCode || 500, err.message || err.sqlMessage)
+    }
+
   }
 
 }
