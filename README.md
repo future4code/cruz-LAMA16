@@ -1,4 +1,51 @@
 # Labenu Music Awards
-Como você deve saber muito bem, o nosso querido chefinho Astrodev é uma pessoa com Networking incrível e ele conhece vários artistas estrelados. Além disso, ele também é um grande ~~megalomaníaco~~ visionário e está planejando fazer um grande evento: o **LAMA**, *Labenu Musical Awards*, um festival  com várias bandas famosas para a formatura da sua turma e, no final, vocês podem eleger a banda que mais gostaram! Entretanto, na opinião dele, vocês só serão merecedores se entregarem um sistema impecável que permita o gerenciamento completo desses shows.
 
-Para isso já deixamos algumas tabelas prontas para vocês não precisarem se preocupar com a modelagem do banco. Deixamos também um template do projeto já com a estrutura da parte de usuários. Vocês podem usá-las a vontade, mas, se quiser fazer do zero sem esse auxílio, também pode.
+##SURGE FRONT : http://lama16-front.surge.sh/
+
+##ENDPOINTS
+
+####Criar tabelas
+* POST */tables*
+
+####Criar usuário
+*  POST */user/signup* <br>
+body -> name, email, password, role
+
+#### Login do usuário
+* POST */user/login* <br>
+  body -> email, password
+
+####Criar banda
+* POST */band/create* <br>
+  body -> name, music_genre, responsible <br>
+  Authorization -> token
+
+#### Buscar banda pelo id ou name
+* GET */band/:idOrName
+
+#### Criar show
+* POST */show/create* <br>
+  body -> weekDay, startTime, endTime, bandId
+  Authorization -> token
+
+#### Buscar todos os shows de um dia
+* GET */show/:weekDay*
+
+#### Criar ingresso
+* POST */show/ticket* <br>
+	body -> name, showId, value, ticketsQuantity <br>
+  Authorization -> token
+
+#### Comprar ingresso
+* PUT */show/ticket* <br>
+	body -> name, ticketsQuantity <br>
+  Authorization -> token
+
+#### Adicionar uma foto
+* PUT */show/photo/:showId <br>
+	body -> url
+  Authorization -> token
+
+#### Obter todas as fotos
+* GET */show/photo* <br>
+	
